@@ -1,0 +1,35 @@
+# {{PROJECT_NAME}} MCP server configuration (Codex / .codex/config.toml)
+#
+# Template note: replace every {{...}} placeholder with the project value.
+# This file registers the MCP servers the harness may call. Registration is not
+# authorization: the C12 tool contract in {{CONVENTIONS_PATH}} still governs which
+# tool may be used, for what, and where. Delete the blocks the project does not use.
+
+[mcp_servers.{{RUNTIME_SERVER_NAME}}]
+command = "{{SCRIPT_RUNTIME}}"
+args = ["{{RUNTIME_SERVER_ENTRY}}"]
+cwd = "{{PROJECT_ROOT}}"
+required = true
+startup_timeout_sec = 20
+tool_timeout_sec = 90
+default_tools_approval_mode = "writes"
+env = { PYTHONUTF8 = "1", PYTHONDONTWRITEBYTECODE = "1" }
+
+# Observation-session tools that may run without an approval prompt.
+# Keep this list to the read/observe tools only; never auto-approve a write.
+[mcp_servers.{{RUNTIME_SERVER_NAME}}.tools.{{RUNTIME_STATUS_TOOL}}]
+approval_mode = "auto"
+
+[mcp_servers.{{RUNTIME_SERVER_NAME}}.tools.{{RUNTIME_START_TOOL}}]
+approval_mode = "auto"
+
+[mcp_servers.{{RUNTIME_SERVER_NAME}}.tools.{{RUNTIME_STOP_TOOL}}]
+approval_mode = "auto"
+
+[mcp_servers.{{RUNTIME_SERVER_NAME}}.tools.{{RUNTIME_OBSERVE_TOOL}}]
+approval_mode = "auto"
+
+# External record system (optional). Remove this block if the project has none.
+[mcp_servers.{{EXTERNAL_RECORD_SERVER_NAME}}]
+url = "{{EXTERNAL_RECORD_MCP_ENDPOINT}}"
+default_tools_approval_mode = "writes"
